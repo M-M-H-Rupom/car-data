@@ -165,13 +165,9 @@ class carinformationMetabox {
 						$meta_value
 					);
 			}
-			$output .= $this->format_rows( $label, $input );
-		}
-		echo '<table class="form-table"><tbody>' . $output . '</tbody></table>';
-	}
-
-	public function format_rows( $label, $input ) {
-		return '<tr><th>'.$label.'</th><td>'.$input.'</td></tr>';
+            $output .= $label . $input;
+        }
+        echo $output;
 	}
 
 	public function save_fields( $post_id ) {
