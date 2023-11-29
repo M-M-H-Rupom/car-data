@@ -19,7 +19,7 @@ add_shortcode('car_table', 'callback_for_car_table');
 function create_car_cpt() {
 
     $labels = array(
-        'name'                  => __('cars', 'Post Type General Name', 'mmh-car'),
+        'name'                  => __('Car', 'Post Type General Name', 'mmh-car'),
         'singular_name'         => __('car', 'Post Type Singular Name', 'mmh-car'),
         'menu_name'             => __('Cars', 'Admin Menu text', 'mmh-car'),
         'name_admin_bar'        => __('car', 'Add New on Toolbar', 'mmh-car'),
@@ -78,7 +78,7 @@ function create_cartype_tax() {
         'update_item'       => __('Update cartype', 'mmh-car'),
         'add_new_item'      => __('Add New cartype', 'mmh-car'),
         'new_item_name'     => __('New cartype Name', 'mmh-car'),
-        'menu_name'         => __('cartype', 'mmh-car'),
+        'menu_name'         => __('Cartype', 'mmh-car'),
     );
     $args = array(
         'labels'             => $labels,
