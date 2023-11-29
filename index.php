@@ -7,13 +7,26 @@
  * Text Domain: mmh-car
  */
 
-// add shortcode for table
-function callback_for_car_table() {
+
+
+
+
+
+
+
+// Register the shortcode
+function car_table_shortcode() {
     ob_start();
-    include_once plugin_dir_path(__FILE__) . '/templates/table.php';
+
+   include_once(plugin_dir_path( __FILE__ ).'/templates/query_table.php');
+
     return ob_get_clean();
 }
-add_shortcode('car_table', 'callback_for_car_table');
+add_shortcode('mycar', 'car_table_shortcode');
+
+
+
+
 
 // Register Custom Post Type car
 function create_car_cpt() {
