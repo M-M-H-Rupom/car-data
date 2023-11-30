@@ -4,206 +4,130 @@
  * Author: Rupom
  * Version: 1.0.0
  * Description: cars information
- * Text Domain: mmh-car
  */
 
-
-
-
-
-
-
-
-// Register the shortcode
-function car_table_shortcode() {
-    ob_start();
-
-   include_once(plugin_dir_path( __FILE__ ).'/templates/query_table.php');
-
-    return ob_get_clean();
-}
-add_shortcode('mycar', 'car_table_shortcode');
-
-
-
-
-
-// Register Custom Post Type car
-function create_car_cpt() {
-
+//custom post
+function callback_car_cpt() {
     $labels = array(
-        'name'                  => __('Car', 'Post Type General Name', 'mmh-car'),
-        'singular_name'         => __('car', 'Post Type Singular Name', 'mmh-car'),
-        'menu_name'             => __('Cars', 'Admin Menu text', 'mmh-car'),
-        'name_admin_bar'        => __('car', 'Add New on Toolbar', 'mmh-car'),
-        'archives'              => __('car Archives', 'mmh-car'),
-        'attributes'            => __('car Attributes', 'mmh-car'),
-        'parent_item_colon'     => __('Parent car:', 'mmh-car'),
-        'all_items'             => __('All cars', 'mmh-car'),
-        'add_new_item'          => __('Add New car', 'mmh-car'),
-        'add_new'               => __('Add New', 'mmh-car'),
-        'new_item'              => __('New car', 'mmh-car'),
-        'edit_item'             => __('Edit car', 'mmh-car'),
-        'update_item'           => __('Update car', 'mmh-car'),
-        'not_found'             => __('Not found', 'mmh-car'),
-        'not_found_in_trash'    => __('Not found in Trash', 'mmh-car'),
-        'featured_image'        => __('Featured Image', 'mmh-car'),
-        'set_featured_image'    => __('Set featured image', 'mmh-car'),
-        'remove_featured_image' => __('Remove featured image', 'mmh-car'),
-        'use_featured_image'    => __('Use as featured image', 'mmh-car'),
-        'insert_into_item'      => __('Insert into car', 'mmh-car'),
+        'name'               => 'Car',
+        'singular_name'      => 'Car',
+        'menu_name'          => 'Car',
+        'add_new'            => 'Add Car',
+        'add_new_item'       => 'Add New Car',
+        'all_items'          => 'All Cars',
+        'edit_item'          => 'Edit Car',
+        'featured_image'     => 'Car Image',
+        'set_featured_image' => 'Set car Image',
+
     );
-    $args = array(
-        'label'               => __('car', 'mmh-car'),
+    $cardata = array(
         'labels'              => $labels,
-        'menu_icon'           => 'dashicons-store',
-        'supports'            => array('title', 'editor', 'thumbnail'),
-        'taxonomies'          => array(),
         'public'              => true,
         'show_ui'             => true,
-        'show_in_menu'        => true,
-        'menu_position'       => 5,
-        'show_in_admin_bar'   => true,
-        'can_export'          => true,
+        'publicly_queryable'  => true,
         'has_archive'         => true,
         'hierarchical'        => true,
         'exclude_from_search' => false,
-        'show_in_rest'        => true,
-        'publicly_queryable'  => true,
+        'supports'            => array('title', 'thumbnail', 'editor'),
         'capability_type'     => 'page',
+        'menu_position'       => 11,
+        'menu_icon'           => 'dashicons-store',
     );
-    register_post_type('car', $args);
 
+    register_post_type('car', $cardata);
 }
-add_action('init', 'create_car_cpt', 0);
+add_action('init', 'callback_car_cpt', 1);
 
-// Register Taxonomy cartype
-function create_cartype_tax() {
+//texonomy
+function callback_for_taxonomy() {
 
-    $labels = array(
-        'name'              => __('cartype', 'taxonomy general name', 'mmh-car'),
-        'singular_name'     => __('cartype', 'taxonomy singular name', 'mmh-car'),
-        'search_items'      => __('Search cartype', 'mmh-car'),
-        'all_items'         => __('All cartype', 'mmh-car'),
-        'parent_item'       => __('Parent cartype', 'mmh-car'),
-        'parent_item_colon' => __('Parent cartype:', 'mmh-car'),
-        'edit_item'         => __('Edit cartype', 'mmh-car'),
-        'update_item'       => __('Update cartype', 'mmh-car'),
-        'add_new_item'      => __('Add New cartype', 'mmh-car'),
-        'new_item_name'     => __('New cartype Name', 'mmh-car'),
-        'menu_name'         => __('Cartype', 'mmh-car'),
+    $car_type_labels = array(
+        'name'          => 'Cartype',
+        'singular_name' => 'Cartype',
+        'menu_name'     => 'Cartype',
+        'all_items'     => 'All Cartype',
+        'add_new'       => 'Add New',
+        'edit_item'     => 'Edit Cartype',
+        'search_items'  => 'Search Cars',
     );
-    $args = array(
-        'labels'             => $labels,
-        'description'        => __('', 'mmh-car'),
+
+    $data_cartype = array(
+        'labels'             => $car_type_labels,
         'hierarchical'       => true,
         'public'             => true,
-        'publicly_queryable' => true,
         'show_ui'            => true,
-        'show_in_menu'       => true,
-        'show_in_nav_menus'  => true,
-        'show_tagcloud'      => true,
-        'show_in_quick_edit' => true,
-        'show_admin_column'  => false,
+        'publicly_queryable' => true,
+        
     );
-    register_taxonomy('cartype', array('car'), $args);
-
+    register_taxonomy('Cartype', array('car'), $data_cartype);
 }
-add_action('init', 'create_cartype_tax');
+add_action('init', 'callback_for_taxonomy');
 
 
-// Meta Box Class: Car Information
-class carinformationMetabox {
 
-	private $screen = array(
-		'post',
-		'page',
-		'car',
-	);
+//meta fields
+class car_info {
 
-	private $meta_fields = array(
-		array(
-			'label' => 'Total Driven',
-			'id' => 'total_driven',
-			'type' => 'text',
-		),
-		array(
-			'label' => 'Millage',
-			'id' => 'millage',
-			'type' => 'text',
-		),
-	);
-
-	public function __construct() {
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
-		add_action( 'save_post', array( $this, 'save_fields' ) );
-	}
-
-	public function add_meta_boxes() {
-		foreach ( $this->screen as $single_screen ) {
-			add_meta_box(
-				'carinformation',
-				__( 'Car Information', 'mmh-car' ),
-				array( $this, 'meta_box_callback' ),
-				$single_screen,
-				'advanced',
-				'default'
-			);
-		}
-	}
-
-	public function meta_box_callback( $post ) {
-		wp_nonce_field( 'carinformation_data', 'carinformation_nonce' );
-		$this->field_generator( $post );
-	}
-
-	public function field_generator( $post ) {
-		$output = '';
-		foreach ( $this->meta_fields as $meta_field ) {
-			$label = '<label for="' . $meta_field['id'] . '">' . $meta_field['label'] . '</label>';
-			$meta_value = get_post_meta( $post->ID, $meta_field['id'], true );
-			if ( empty( $meta_value ) ) {
-				if ( isset( $meta_field['default'] ) ) {
-					$meta_value = $meta_field['default'];
-				}
-			}
-			switch ( $meta_field['type'] ) {
-				default:
-					$input = sprintf(
-						'<input %s id="%s" name="%s" type="%s" value="%s">',
-						$meta_field['type'] !== 'color' ? 'style="width: 100%"' : '',
-						$meta_field['id'],
-						$meta_field['id'],
-						$meta_field['type'],
-						$meta_value
-					);
-			}
-            $output .= $label . $input;
+    private $car_datas = array(
+        array(
+            'label' => 'Millage',
+            'type'  => 'number',
+            'id'    => 'millage',
+        ),
+        array(
+            'label' => 'Car Type',
+            'type'  => 'text',
+            'id'    => 'car_type',
+        ),
+        array(
+            'label' => 'Brand',
+            'type'  => 'text',
+            'id'    => 'brand',
+        ),
+        array(
+            'label' => 'Model Year',
+            'type'  => 'text',
+            'id'    => 'model_year',
+        ),
+        array(
+            'label' => 'Total Driven',
+            'type'  => 'number',
+            'id'    => 'total_driven',
+        ),
+    );
+    public function __construct() {
+        add_action('admin_menu', array($this, 'callback_for_metabox'));
+        add_action('save_post', array($this, 'callback_for_save_post'));
+    }
+    public function callback_for_metabox() {
+        add_meta_box('car_information', 'Information', array($this, 'callback_meta_box'), array('page', 'car'));
+    }
+    public function callback_meta_box($post) {
+        $this->car_data_field($post);
+    }
+    public function car_data_field($post) {
+        $result = '';
+        foreach ($this->car_datas as $car_data) {
+            $label = '<label>' . '<h4 style="margin: 2px 0; color: #ff6b6b">'. $car_data['label'] .'</h4>' . '</label>';
+            $input_value = get_post_meta($post->ID, $car_data['id'], true);
+            $input = sprintf('<input type="%s" id="%s" name="%s" value="%s" style="margin-top: 6px; margin-bottom: 12px; width : 100%%;">',
+                $car_data['type'],
+                $car_data['id'],
+                $car_data['id'],
+                $input_value,
+            );
+            $result .= $label . $input .'<br>';
         }
-        echo $output;
-	}
+        echo $result;
+    }
+    public function callback_for_save_post($post_id) {
+        foreach ($this->car_datas as $car_data) {
+            if (isset($_POST[$car_data['id']])) {
+                $car_value = sanitize_text_field($_POST[$car_data['id']]);
 
-	public function save_fields( $post_id ) {
-		if ( ! isset( $_POST['carinformation_nonce'] ) )
-			return $post_id;
-		$nonce = $_POST['carinformation_nonce'];
-		if ( !wp_verify_nonce( $nonce, 'carinformation_data' ) )
-			return $post_id;
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-			return $post_id;
-		foreach ( $this->meta_fields as $meta_field ) {
-			if ( isset( $_POST[ $meta_field['id'] ] ) ) {
-				switch ( $meta_field['type'] ) {
-					case 'text':
-						$_POST[ $meta_field['id'] ] = sanitize_text_field( $_POST[ $meta_field['id'] ] );
-						break;
-				}
-				update_post_meta( $post_id, $meta_field['id'], $_POST[ $meta_field['id'] ] );
-			}
-		}
-	}
+                update_post_meta($post_id, $car_data['id'], $_POST[$car_data['id']]);
+            }
+        }
+    }
 }
-
-if (class_exists('carinformationMetabox')) {
-	new carinformationMetabox;
-};
+new car_info();
